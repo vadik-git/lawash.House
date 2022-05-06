@@ -11,4 +11,4 @@ const firebaseConfig = {
   };
 
 firebase.initializeApp(firebaseConfig); //инициализировать приложение 
-module.exports = {firebase}; // экспортируем приложение
+export {firebase}; // экспортируем приложение
