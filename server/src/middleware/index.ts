@@ -1,0 +1,1 @@
+export { ValidateBodyReq } from './lawash.middleware/index';
