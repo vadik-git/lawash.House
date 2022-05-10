@@ -1,0 +1,1 @@
+export { lawashController as LawashController } from './lawash.controller/index'
