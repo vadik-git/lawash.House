@@ -1,4 +1,6 @@
 import express from "express";
+import cors from 'cors';
+
 import connectDB from "./config/database";
 import AppRouter from "./routes";
 
@@ -11,7 +13,7 @@ connectDB();
 // Express configuration
 app.set("port", 5000);
 app.use(express.json());
-
+app.use(cors({origin: "*", credentials: true}));
 router.init();
 
 const start = async () => {
