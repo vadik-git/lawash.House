@@ -1,10 +1,10 @@
 import { ConnectionOptions, connect } from "mongoose";
 
-const url = "mongodb+srv://lawash:lawash_house@cluster0.k2ghd.mongodb.net/lawashDB?retryWrites=true&w=majority"
+import { MongoDB_URL } from "../consts";
 
 const connectDB = async () => {
   try {
-    const mongoURI: string = url;
+    const mongoURI: string = MongoDB_URL;
     const options: ConnectionOptions = {
       useNewUrlParser: true,
       useCreateIndex: true,

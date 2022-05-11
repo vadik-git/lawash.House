@@ -1,65 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, MenuItem, TextField } from "@mui/material";
 import { useMutation, useQueryClient } from 'react-query';
-import { LawashService } from '../../services';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useFetchIdLawash } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+
 import { ILawash } from '../../types';
-
-const styles = {
-  lawashForm: {
-    margin: '50px auto',
-    width: '50%',
-    backgroundColor: '#999999',
-    padding: '30px 50px'
-  },
-  btn: {
-    marginTop: '20px',
-    color: '#000',
-    '&:hover': {
-      backgroundColor: '#dbdbdb',
-    },
-  },
-}
-
-const sizes = [
-  {
-    value: 'S',
-    label: 'Small',
-  },
-  {
-    value: 'M',
-    label: 'Medium',
-  },
-  {
-    value: 'L',
-    label: 'Large',
-  },
-  {
-    value: 'XL',
-    label: 'Extra large',
-  },
-];
-
-const initalValue = {
-  date: '',
-  image: {
-    name: '',
-    type: '',
-    size: '',
-    base64: '',
-    file: '',
-  },
-  ingredients: '',
-  isActive: '',
-  price: '',
-  size: '',
-  title: '',
-  _id: '',
-}
+import { CREATE, UPDATE, CHANGE, formInitalValue, sizesLawash, LAWASHES, LAWASH_PATH } from '../../consts';
+import { LawashService } from '../../services';
 
 export const LawashForm = ({data}: any) => {
-  const [formData, setFormData] = useState<ILawash>(data || initalValue);
+  const [formData, setFormData] = useState<ILawash>(data || formInitalValue);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const imgRef = useRef() as any;
@@ -73,9 +22,9 @@ export const LawashForm = ({data}: any) => {
     e.preventDefault();
 
     await mutateAsync(formData);
-    queryClient.invalidateQueries('lawashes');
+    queryClient.invalidateQueries(LAWASHES);
     queryClient.clear();
-    navigate('../lawash');
+    navigate(`../${LAWASH_PATH}`);
   };
 
   const imageBase64 = (e: any) => {
@@ -98,8 +47,8 @@ export const LawashForm = ({data}: any) => {
   return (
     <div style={styles.lawashForm}>
       <h3 
-        style={{textAlign: 'center', margin: '20px 0 40px'}}
-      >{data ? "Обновить Шаверму" : "Создать Шаверму"}</h3>
+        style={styles.h3}
+      >{data ? `${UPDATE} Шаверму` : `${CREATE} Шаверму`}</h3>
 
       <input 
         ref={imgRef}
@@ -119,7 +68,7 @@ export const LawashForm = ({data}: any) => {
               variant="text" 
               onClick={() => imgRef.current.click()}
             >
-              Изменить
+              {CHANGE}
             </Button>
           </>
         : <Button 
@@ -132,10 +81,7 @@ export const LawashForm = ({data}: any) => {
 
       <form 
         onSubmit={(e: any) => hundleSubmit(e)}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
+        style={styles.form}
       >
         <TextField 
           sx={{marginTop: 3}}
@@ -171,7 +117,7 @@ export const LawashForm = ({data}: any) => {
           fullWidth
           variant="standard"
         >
-          {sizes.map((option) => (
+          {sizesLawash.map((option: any) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -182,10 +128,33 @@ export const LawashForm = ({data}: any) => {
           sx={styles.btn}
           type="submit"
         >
-          {data ? "Обновить" : "Создать"}
+          {data ? UPDATE : CREATE}
         </Button>
       </form>
 
     </div>
   )
+}
+
+const styles = {
+  lawashForm: {
+    margin: '50px auto',
+    width: '50%',
+    backgroundColor: '#999999',
+    padding: '30px 50px'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+  },
+  btn: {
+    marginTop: '20px',
+    color: '#000',
+    '&:hover': {
+      backgroundColor: '#dbdbdb',
+    },
+  },
+  h3: {
+    margin: '20px 0 40px'
+  }
 }

@@ -1,4 +1,4 @@
-import { LawashForm } from "../../components"
+import { LawashForm } from "../../components";
 
 export const CreateLawash = () => {
   return (

@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { API_URL } from '../../consts';
+import { ILawash } from '../../types';
 import { HttpService } from '../index';
 
 class LawashService extends HttpService {
@@ -14,15 +16,15 @@ class LawashService extends HttpService {
     return res.data;
   }
 
-  async createLawash(data: any) {    
+  async createLawash(data: ILawash) {    
     const res = await this.post('create', data);
     return res.data;
   }
 
-  async updateLawash(data: any) {
+  async updateLawash(data: ILawash) {
     const res = await this.put('update', data);
     return res.data;
   }
 };
 
-export const lawashService = new LawashService('http://localhost:5000', 'api/lawash', axios);
+export const lawashService = new LawashService(API_URL, 'api/lawash', axios);

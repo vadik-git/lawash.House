@@ -10,28 +10,33 @@ import { Button } from '@mui/material';
 import { RiShoppingBasketLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom';
 
+import { UPDATE_PATH } from '../../consts';
+
 export const LawashCard = ({lawash, changeMode}: any) => {
   const navigate = useNavigate();
-  const { title, price, ingredients, size, date, image} = lawash;
+  const { 
+    title, 
+    price, 
+    ingredients, 
+    size, 
+    image,
+  } = lawash;
 
-  const onUpdateLawashPage = () => navigate(`../update/${lawash._id}`);
+  const onUpdateLawashPage = () => navigate(`../${UPDATE_PATH}/${lawash._id}`);
+
   return (
-    <Card sx={{ 
-      maxWidth: '30%',
-      padding: '10px 30px',
-      margin: '20px',
-      backgroundColor: '#ffffff'
-    }}>
+    <Card style={styles.card}>
       <CardHeader
         title={title}
-        subheader={`${new Date(date)}`}
       />
+
       <CardMedia
+        style={styles.cardMedia}
         component="img"
-        height="200"
         image={image.base64}
         alt={title}
       />
+
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           {ingredients}
@@ -43,13 +48,38 @@ export const LawashCard = ({lawash, changeMode}: any) => {
           Size: {size}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing sx={{display:'flex', justifyContent: 'space-between'}}>
+
+      <CardActions 
+        disableSpacing 
+        style={styles.cardAction}
+      >
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
+
         {changeMode && <Button onClick={onUpdateLawashPage}>Изменить</Button>}
-        <Button><RiShoppingBasketLine/>в корзину</Button>
+
+        <Button>
+          <RiShoppingBasketLine/>в корзину
+        </Button>
       </CardActions>
+
     </Card>
   );
+}
+
+const styles = {
+  card: { 
+    maxWidth: '31%',
+    padding: '10px 30px',
+    margin: '20px',
+    backgroundColor: '#ffffff'
+  },
+  cardAction: {
+    display:'flex', 
+    justifyContent: 'space-between'
+  },
+  cardMedia: {
+    width: '100%'
+  }
 }
