@@ -6,5 +6,5 @@ export interface ILawash extends Document {
   description: string,
   data: string,
   isActive: boolean,
-  price: number
-}
+  price: number,
+};

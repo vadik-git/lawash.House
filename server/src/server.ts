@@ -1,5 +1,6 @@
 import express from "express";
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
 import connectDB from "./config/database";
 import AppRouter from "./routes";
@@ -12,7 +13,8 @@ connectDB();
 
 // Express configuration
 app.set("port", 5000);
-app.use(express.json());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(cors({origin: "*", credentials: true}));
 router.init();
 
