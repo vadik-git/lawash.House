@@ -25,6 +25,11 @@ class LawashService extends HttpService {
     const res = await this.put('update', data);
     return res.data;
   }
+
+  async deleteLawash(id: string) {    
+    const res = await this.delete(`delete/${id}`);
+    return res.data;
+  }
 };
 
 export const lawashService = new LawashService(API_URL, 'api/lawash', axios);

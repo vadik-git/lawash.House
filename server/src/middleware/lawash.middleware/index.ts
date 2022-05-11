@@ -26,20 +26,9 @@ export const ValidateBodyReq: RequestHandler = async(req: Request, res: Response
 
 export const ValidateParamsId = () => async(req: Request, res: Response, next: NextFunction) => {
   try {
-    const res = await Lawash.exists({ _id: req.params.id });
-    if(!res) throw("Такой ID отсутствует в базе данных")
+    await Lawash.exists({ _id: req.params.id });
     next();
   } catch (e) {
-    res.status(404).json(e);
-  }
-};
-
-export const ValidateBodyId = () => async(req: Request, res: Response, next: NextFunction) => {
-  try {
-    const res = await Lawash.exists({ _id: req.body._id });
-    if(!res) throw("Такой ID отсутствует в базе данных")
-    next();
-  } catch (e) {
-    res.status(404).json(e);
+    res.status(404).json("Такой ID отсутствует в базе данных");
   }
 };

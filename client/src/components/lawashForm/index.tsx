@@ -4,7 +4,15 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { ILawash } from '../../types';
-import { CREATE, UPDATE, CHANGE, formInitalValue, sizesLawash, LAWASHES, LAWASH_PATH } from '../../consts';
+import { 
+  CREATE, 
+  UPDATE, 
+  CHANGE, 
+  formInitalValue, 
+  sizesLawash, 
+  LAWASHES, 
+  LAWASH_PATH,
+} from '../../consts';
 import { LawashService } from '../../services';
 
 export const LawashForm = ({data}: any) => {
@@ -23,7 +31,6 @@ export const LawashForm = ({data}: any) => {
 
     await mutateAsync(formData);
     queryClient.invalidateQueries(LAWASHES);
-    queryClient.clear();
     navigate(`../${LAWASH_PATH}`);
   };
 
