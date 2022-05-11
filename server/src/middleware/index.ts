@@ -1,1 +1,1 @@
-export { ValidateBodyReq, ValidateParamsId } from './lawash.middleware/index';
+export { ValidateBodyReq, ValidateParamsId, ValidateBodyId } from './lawash.middleware/index';
