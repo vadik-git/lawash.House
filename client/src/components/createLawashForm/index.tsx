@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, MenuItem, TextField } from "@mui/material";
-import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import { LawashService } from '../../services';
 import { useParams } from 'react-router-dom';
+import { useFetchIdLawash } from '../../hooks';
 
 const styles = {
   lawashForm: {
@@ -41,18 +41,20 @@ const sizes = [
 ];
 
 export const CreateLawashForm = () => {
-  const [img, setImg] = useState('') as any;
-  const [size, setSize] = useState('S') as any;
+  const params = useParams() as any;
+  const { isLoading, isError, data } = useFetchIdLawash(params.id);
+  
   const imgRef = useRef() as any;
-  const params = useParams();
+  const [image, setImage] = useState('') as any;
+  const [size, setSize] = useState('') as any;
+  const [title, setTitle] = useState('') as any;
+  const [ingredients, setIngredients] = useState('') as any;
+  const [price, setPrice] = useState('') as any;
+  
   const mutation = useMutation((formData: any) => {
+    if(data) return LawashService.updateLawash(formData);
     return LawashService.createLawash(formData);
   })
-
-
-  const handleChangeSize = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSize(event.target.value);
-  };
   
   const imageBase64 = (e: any) => {
     const file = e.target.files[0];  
@@ -67,30 +69,27 @@ export const CreateLawashForm = () => {
         base64: reader.result,
         file: file,
       };
-      setImg(fileInfo);
+      setImage(fileInfo);
     }  
   }
 
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-      price: '',
-      ingredients: '',
-    },
-    onSubmit: values => {
-      const obj = {
-        title: values.title,
-        date: new Date().toISOString(),
-        isActive: true,
-        price: values.price,
-        image: img,
-        ingredients: values.ingredients,
-        size: size
-      }
+  const hundleSubmit = () => {
+    const obj = {
+      title,
+      price,
+      image,
+      ingredients,
+      size,
+      date: new Date().toISOString(),
+      isActive: true,
+    }
 
-      mutation.mutate(obj);
-    },
-  });
+    mutation.mutate(obj);
+  }
+
+  if(isLoading) return (<p>Loading...</p>)  
+  if(isError) return (<p>Что то пошло не так</p>)
+ 
   return (
     <div style={styles.lawashForm}>
       <h3 style={{textAlign: 'center'}}>Создать Шаверму</h3>
@@ -102,10 +101,10 @@ export const CreateLawashForm = () => {
         onChange={(e: any) => imageBase64(e)} 
         accept="image/*"
       />
-      {img 
+      {image || data 
         ? <>
             <img 
-              src={img.base64} 
+              src={image ? image.base64 : data.image.base64} 
               alt="image_lawash" 
               width={200}
             /> 
@@ -125,7 +124,7 @@ export const CreateLawashForm = () => {
         }
 
       <form 
-        onSubmit={formik.handleSubmit}
+        onSubmit={hundleSubmit}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -135,26 +134,23 @@ export const CreateLawashForm = () => {
           sx={{marginTop: 3}}
           required 
           label="Название" 
-          name="title"
-          value={formik.values.title}
-          onChange={formik.handleChange}
+          value={title ? title : data ? data.title : ''}
+          onChange={(e: any) => setTitle(e.target.value)}
           variant="standard" 
         />
         <TextField
           sx={{marginTop: 3}}
           required 
-          name="ingredients"
-          value={formik.values.ingredients}
-          onChange={formik.handleChange}
+          value={ingredients ? ingredients : data ? data.ingredients : ''}
+          onChange={(e: any) => setIngredients(e.target.value)}
           label="Ингредиенты"
           variant="standard"
         />
         <TextField
           sx={{marginTop: 3}}
           required 
-          name="price"
-          value={formik.values.price}
-          onChange={formik.handleChange}
+          value={price ? price : data ? data.price : ''}
+          onChange={(e: any) => setPrice(e.target.value)}
           label="Цена" 
           variant="standard" 
         />
@@ -163,9 +159,9 @@ export const CreateLawashForm = () => {
           select
           required
           label="Размер"
-          value={size}
+          value={size ? size : data? data.size : ''}
           fullWidth
-          onChange={handleChangeSize}
+          onChange={(e: any) => setSize(e.target.value)}
           variant="standard"
         >
           {sizes.map((option) => (

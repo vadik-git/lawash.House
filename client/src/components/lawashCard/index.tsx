@@ -15,7 +15,7 @@ export const LawashCard = ({lawash, changeMode}: any) => {
   const { title, price, ingredients, size, date, image} = lawash;
 
   const handleChangeLawashCard = () => {
-    navigate('../createLawash', lawash)
+    navigate(`../createLawash/${lawash._id}`);
   }
   return (
     <Card sx={{ 

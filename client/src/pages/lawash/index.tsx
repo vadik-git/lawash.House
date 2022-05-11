@@ -6,7 +6,7 @@ import { LawashCard } from "../../components";
 import { LawashService } from "../../services";
 
 export const Lawash = () => {
-  const { isLoading, isError, data } = useQuery('todos', () => fetchLawash());
+  const { isLoading, isError, data } = useQuery('lawashes', () => fetchLawash());
   const [isChangeMode, setIsChangeMode] = useState(false)
 
   const fetchLawash = async() => {
