@@ -9,10 +9,13 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Button } from '@mui/material';
 import { RiShoppingBasketLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from 'react-query';
 
-import { UPDATE_PATH } from '../../consts';
+import { LAWASHES, LAWASH_PATH, UPDATE_PATH } from '../../consts';
+import { LawashService } from '../../services';
 
 export const LawashCard = ({lawash, changeMode}: any) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { 
     title, 
@@ -23,6 +26,15 @@ export const LawashCard = ({lawash, changeMode}: any) => {
   } = lawash;
 
   const onUpdateLawashPage = () => navigate(`../${UPDATE_PATH}/${lawash._id}`);
+
+  const fetchRemove = (id: string) => LawashService.deleteLawash(id);
+  const { mutateAsync } = useMutation(fetchRemove);
+
+  const handleRemove = async() => {
+    await mutateAsync(lawash._id);
+    queryClient.invalidateQueries(LAWASHES);
+    navigate(`../${LAWASH_PATH}`);
+  };
 
   return (
     <Card style={styles.card}>
@@ -57,7 +69,10 @@ export const LawashCard = ({lawash, changeMode}: any) => {
           <FavoriteIcon />
         </IconButton>
 
-        {changeMode && <Button onClick={onUpdateLawashPage}>Изменить</Button>}
+        {changeMode && <>
+          <Button onClick={onUpdateLawashPage}>Изменить</Button>
+          <Button onClick={handleRemove}>Удалить</Button>
+        </>}
 
         <Button>
           <RiShoppingBasketLine/>в корзину

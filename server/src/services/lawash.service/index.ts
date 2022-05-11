@@ -18,6 +18,11 @@ export class LawashService {
   }
 
   async update(id: string, lawash: ILawash) {
-    return await Lawash.findByIdAndUpdate(id, lawash);
+    await Lawash.findByIdAndUpdate(id, lawash);
+    return await Lawash.findById(id);
+  }
+
+  async delete(id: any) {
+    return await Lawash.deleteOne(id);
   }
 }
