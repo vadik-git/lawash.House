@@ -1,9 +1,10 @@
 import { useQuery } from "react-query";
 import { LawashService } from "../services";
+import { ILawash } from "../types";
 
 export default function (id: string) {
   const fetchLawashById = async() => {
-    return await LawashService.getLawashById(id);
+    return await LawashService.getLawashById(id) as ILawash
   }
   
   if(id) {

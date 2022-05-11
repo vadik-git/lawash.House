@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { LawashService } from '../../services';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFetchIdLawash } from '../../hooks';
+import { ILawash } from '../../types';
 
 const styles = {
   lawashForm: {
@@ -58,16 +59,24 @@ const initalValue = {
 }
 
 export const LawashForm = ({data}: any) => {
-  const imgRef = useRef() as any;
-  const [formData, setFormData] = useState(data || initalValue);
+  const [formData, setFormData] = useState<ILawash>(data || initalValue);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const mutation = useMutation((formData: any) => {
-    if(data) return LawashService.updateLawash(formData);
-    return LawashService.createLawash(formData);
-  })  
-  
-  const onLawashPage = () => navigate(`../lawash`);
+  const imgRef = useRef() as any;
+
+  const create = (lawash: ILawash) => LawashService.createLawash(lawash);
+  const edit = (lawash: ILawash) => LawashService.updateLawash(lawash);
+
+  const { mutateAsync } = useMutation(data ? edit : create);
+
+  const hundleSubmit = async(e: any) => {
+    e.preventDefault();
+
+    await mutateAsync(formData);
+    queryClient.invalidateQueries('lawashes');
+    queryClient.clear();
+    navigate('../lawash');
+  };
 
   const imageBase64 = (e: any) => {
     const file = e.target.files[0];  
@@ -84,13 +93,6 @@ export const LawashForm = ({data}: any) => {
       } as any;
       setFormData({...formData, image: {...fileInfo}});
     }  
-  }
-
-  const hundleSubmit = (e: any) => {
-    e.preventDefault();
-
-    mutation.mutate(formData);
-    onLawashPage();
   }
 
   return (
