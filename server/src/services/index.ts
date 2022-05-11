@@ -1,0 +1,1 @@
+export { LawashService } from './lawash.service'

@@ -1,0 +1,1 @@
+export const MongoDB_URL = "mongodb+srv://lawash:lawash_house@cluster0.k2ghd.mongodb.net/lawashDB?retryWrites=true&w=majority"
