@@ -6,12 +6,8 @@ const lawash: Schema = new Schema({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    required: true
-  },
   date: {
-    type: String,
+    type: Date,
     required: true
   },
   isActive: {
@@ -21,6 +17,18 @@ const lawash: Schema = new Schema({
   price: {
     type: Number,
     require: true
+  },
+  image: {
+    type: Object,
+    require: true
+  },
+  ingredients: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: String,
+    required: true
   }
 }, {
   versionKey: false

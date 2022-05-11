@@ -16,10 +16,10 @@ export class HttpService {
   get(url: string) {
     return this.fetchingService.get(this.getFullApiUrl(url));
   };
-  post(data: object | string, url: string) {
+  post(url: string, data: object | string) {    
     return this.fetchingService.post(this.getFullApiUrl(url), data);
   };
-  put(data: object, url: string) {
+  put(url: string, data: object) {
     return this.fetchingService.put(this.getFullApiUrl(url), data);
   };
   delete(url: string) {
