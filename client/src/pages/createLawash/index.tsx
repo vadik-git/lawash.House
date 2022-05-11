@@ -1,7 +1,7 @@
-import { CreateLawashForm } from "../../components"
+import { LawashForm } from "../../components"
 
 export const CreateLawash = () => {
   return (
-    <CreateLawashForm/>
+    <LawashForm/>
   )
 }

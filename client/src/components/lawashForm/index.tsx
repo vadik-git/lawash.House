@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, MenuItem, TextField } from "@mui/material";
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { LawashService } from '../../services';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useFetchIdLawash } from '../../hooks';
 
 const styles = {
@@ -40,22 +40,35 @@ const sizes = [
   },
 ];
 
-export const CreateLawashForm = () => {
-  const params = useParams() as any;
-  const { isLoading, isError, data } = useFetchIdLawash(params.id);
-  
+const initalValue = {
+  date: '',
+  image: {
+    name: '',
+    type: '',
+    size: '',
+    base64: '',
+    file: '',
+  },
+  ingredients: '',
+  isActive: '',
+  price: '',
+  size: '',
+  title: '',
+  _id: '',
+}
+
+export const LawashForm = ({data}: any) => {
   const imgRef = useRef() as any;
-  const [image, setImage] = useState('') as any;
-  const [size, setSize] = useState('') as any;
-  const [title, setTitle] = useState('') as any;
-  const [ingredients, setIngredients] = useState('') as any;
-  const [price, setPrice] = useState('') as any;
-  
+  const [formData, setFormData] = useState(data || initalValue);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const mutation = useMutation((formData: any) => {
     if(data) return LawashService.updateLawash(formData);
     return LawashService.createLawash(formData);
-  })
+  })  
   
+  const onLawashPage = () => navigate(`../lawash`);
+
   const imageBase64 = (e: any) => {
     const file = e.target.files[0];  
 
@@ -68,31 +81,23 @@ export const CreateLawashForm = () => {
         size: Math.round(file.size / 1000) + ' kB',
         base64: reader.result,
         file: file,
-      };
-      setImage(fileInfo);
+      } as any;
+      setFormData({...formData, image: {...fileInfo}});
     }  
   }
 
-  const hundleSubmit = () => {
-    const obj = {
-      title,
-      price,
-      image,
-      ingredients,
-      size,
-      date: new Date().toISOString(),
-      isActive: true,
-    }
+  const hundleSubmit = (e: any) => {
+    e.preventDefault();
 
-    mutation.mutate(obj);
+    mutation.mutate(formData);
+    onLawashPage();
   }
 
-  if(isLoading) return (<p>Loading...</p>)  
-  if(isError) return (<p>Что то пошло не так</p>)
- 
   return (
     <div style={styles.lawashForm}>
-      <h3 style={{textAlign: 'center'}}>Создать Шаверму</h3>
+      <h3 
+        style={{textAlign: 'center', margin: '20px 0 40px'}}
+      >{data ? "Обновить Шаверму" : "Создать Шаверму"}</h3>
 
       <input 
         ref={imgRef}
@@ -101,10 +106,10 @@ export const CreateLawashForm = () => {
         onChange={(e: any) => imageBase64(e)} 
         accept="image/*"
       />
-      {image || data 
+      {formData.image.base64
         ? <>
             <img 
-              src={image ? image.base64 : data.image.base64} 
+              src={formData.image.base64} 
               alt="image_lawash" 
               width={200}
             /> 
@@ -124,7 +129,7 @@ export const CreateLawashForm = () => {
         }
 
       <form 
-        onSubmit={hundleSubmit}
+        onSubmit={(e: any) => hundleSubmit(e)}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -134,23 +139,23 @@ export const CreateLawashForm = () => {
           sx={{marginTop: 3}}
           required 
           label="Название" 
-          value={title ? title : data ? data.title : ''}
-          onChange={(e: any) => setTitle(e.target.value)}
+          value={formData.title}
+          onChange={(e: any) => setFormData({...formData, title: e.target.value})}
           variant="standard" 
         />
         <TextField
           sx={{marginTop: 3}}
           required 
-          value={ingredients ? ingredients : data ? data.ingredients : ''}
-          onChange={(e: any) => setIngredients(e.target.value)}
+          value={formData.ingredients}
+          onChange={(e: any) => setFormData({...formData, ingredients: e.target.value})}
           label="Ингредиенты"
           variant="standard"
         />
         <TextField
           sx={{marginTop: 3}}
           required 
-          value={price ? price : data ? data.price : ''}
-          onChange={(e: any) => setPrice(e.target.value)}
+          value={formData.price}
+          onChange={(e: any) => setFormData({...formData, price: e.target.value})}
           label="Цена" 
           variant="standard" 
         />
@@ -159,9 +164,9 @@ export const CreateLawashForm = () => {
           select
           required
           label="Размер"
-          value={size ? size : data? data.size : ''}
+          value={formData.size}
+          onChange={(e: any) => setFormData({...formData, size: e.target.value})}
           fullWidth
-          onChange={(e: any) => setSize(e.target.value)}
           variant="standard"
         >
           {sizes.map((option) => (
@@ -175,7 +180,7 @@ export const CreateLawashForm = () => {
           sx={styles.btn}
           type="submit"
         >
-          Создать
+          {data ? "Обновить" : "Создать"}
         </Button>
       </form>
 

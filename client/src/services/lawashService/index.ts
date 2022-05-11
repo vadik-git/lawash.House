@@ -10,7 +10,7 @@ class LawashService extends HttpService {
   }
 
   async getLawashById(id: string) {
-    const res = await this.get(`/${id}`);
+    const res = await this.get(`${id}`);
     return res.data;
   }
 

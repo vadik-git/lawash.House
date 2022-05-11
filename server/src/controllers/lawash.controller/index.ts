@@ -10,7 +10,7 @@ class LawashController {
     return res.status(200).json(lawash);
   }
 
-  async getOneById(req: Request, res: Response) {
+  async getOneById(req: Request, res: Response) {    
     const lawash = await this.LawashService.findById(req.params.id);
 
     return res.status(200).json(lawash);

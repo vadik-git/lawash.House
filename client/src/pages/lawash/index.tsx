@@ -1,11 +1,14 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 import { LawashCard } from "../../components";
 import { LawashService } from "../../services";
 
 export const Lawash = () => {
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries('lawashes');
+  
   const { isLoading, isError, data } = useQuery('lawashes', () => fetchLawash());
   const [isChangeMode, setIsChangeMode] = useState(false)
 

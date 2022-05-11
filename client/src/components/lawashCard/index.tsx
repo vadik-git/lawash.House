@@ -3,7 +3,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Button } from '@mui/material';
@@ -14,9 +14,7 @@ export const LawashCard = ({lawash, changeMode}: any) => {
   const navigate = useNavigate();
   const { title, price, ingredients, size, date, image} = lawash;
 
-  const handleChangeLawashCard = () => {
-    navigate(`../createLawash/${lawash._id}`);
-  }
+  const onUpdateLawashPage = () => navigate(`../update/${lawash._id}`);
   return (
     <Card sx={{ 
       maxWidth: '30%',
@@ -49,7 +47,7 @@ export const LawashCard = ({lawash, changeMode}: any) => {
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        {changeMode && <Button onClick={handleChangeLawashCard}>Изменить</Button>}
+        {changeMode && <Button onClick={onUpdateLawashPage}>Изменить</Button>}
         <Button><RiShoppingBasketLine/>в корзину</Button>
       </CardActions>
     </Card>
