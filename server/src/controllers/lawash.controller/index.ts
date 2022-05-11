@@ -32,6 +32,12 @@ class LawashController {
 
     return res.status(200).json(lawash);
   }
+
+  async deleteLawash(req: Request, res: Response) {
+    const lawash = await this.LawashService.delete({_id: req.params.id});
+
+    return res.status(200).json(lawash);
+  }
 }
 
 export const lawashController = new LawashController(new LawashService());
