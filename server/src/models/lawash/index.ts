@@ -19,7 +19,7 @@ const lawash: Schema = new Schema({
     require: true
   },
   image: {
-    type: String,
+    type: Object,
     require: true
   },
   ingredients: {

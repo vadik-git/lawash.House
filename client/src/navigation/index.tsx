@@ -1,13 +1,15 @@
-import React from 'react';
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-import { Lawash, Main } from '../pages';
+import { CreateLawash, Lawash, Main } from '../pages';
 
 const Navigation = () => {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
       <Route path="lawash" element={<Lawash />} />
+      <Route path="createLawash" element={<CreateLawash />}>
+        <Route path=":id" element={<CreateLawash />}/>
+      </Route>
     </Routes>
   )
 }

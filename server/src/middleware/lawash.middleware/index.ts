@@ -9,7 +9,7 @@ const validateLawashBody: Schema = Joi.object({
   date: Joi.date().required().messages(validationErrorMessage('date', 'date')),
   isActive: Joi.boolean().required().messages(validationErrorMessage('boolean', 'isActive')),
   price: Joi.number().required().messages(validationErrorMessage('number', 'price')),
-  image: Joi.string().required().messages(validationErrorMessage('string', 'image')),
+  image: Joi.object().required().messages(validationErrorMessage('object', 'image')),
   ingredients: Joi.string().required().messages(validationErrorMessage('string', 'ingredients')),
   size: Joi.string().required().messages(validationErrorMessage('string', 'size')),
 });

@@ -10,7 +10,7 @@ class LawashController {
     return res.status(200).json(lawash);
   }
 
-  async createLawash(req: Request, res: Response) {
+  async createLawash(req: Request, res: Response) {    
     const lawash = await this.LawashService.create(req.body);
     
     if(typeof lawash === 'string') {

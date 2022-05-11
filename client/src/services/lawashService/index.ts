@@ -8,6 +8,11 @@ class LawashService extends HttpService {
     
     return res.data;
   }
+
+  async createLawash(data: any) {    
+    const res = await this.post('create', data);
+    return res.data;
+  }
 };
 
 export const lawashService = new LawashService('http://localhost:5000', 'api/lawash', axios);
