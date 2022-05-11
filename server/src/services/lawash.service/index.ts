@@ -16,4 +16,8 @@ export class LawashService {
 
     return await Lawash.create(lawash);
   }
+
+  async update(id: string, lawash: ILawash) {
+    return await Lawash.findByIdAndUpdate(id, lawash);
+  }
 }

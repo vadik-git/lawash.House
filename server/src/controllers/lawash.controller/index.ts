@@ -25,6 +25,12 @@ class LawashController {
 
     return res.status(200).json(lawash);
   }
+
+  async updateLawash(req: Request, res: Response) {
+    const lawash = await this.LawashService.update(req.body._id, req.body);
+
+    return res.status(200).json(lawash);
+  }
 }
 
 export const lawashController = new LawashController(new LawashService());
