@@ -5,7 +5,13 @@ class LawashController {
   constructor(private LawashService: LawashService) {}
 
   async getAllLawash(req: Request, res: Response) {
-    const lawash = await this.LawashService.getAll();
+    const lawash = await this.LawashService.findAll();
+
+    return res.status(200).json(lawash);
+  }
+
+  async getOneById(req: Request, res: Response) {
+    const lawash = await this.LawashService.findById(req.params.id);
 
     return res.status(200).json(lawash);
   }

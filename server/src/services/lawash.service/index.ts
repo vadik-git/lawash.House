@@ -2,8 +2,12 @@ import { Lawash } from "../../models";
 import { ILawash } from "../../types";
 
 export class LawashService {
-  async getAll() {
+  async findAll() {
     return await Lawash.find();
+  }
+
+  async findById(id: string) {    
+    return await Lawash.findById(id);
   }
 
   async create(lawash: ILawash) {
