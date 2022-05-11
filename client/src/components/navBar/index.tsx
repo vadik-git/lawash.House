@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 const styles = {
   btn: {
+    padding: 0,
     margin: '0 20px',
     borderColor: '#fff',
     '&:hover': {
@@ -10,6 +11,7 @@ const styles = {
     },
   },
   link: {
+    padding: '5px 15px',
     color: '#fff'
   }
 }
@@ -18,12 +20,21 @@ export const NavBar = () => {
   return (
     <>
       <nav className="nav">
-        <Button 
-          variant="outlined"
-          sx={styles.btn}
-        >
-          <Link style={styles.link} to="/lawash">Шаурма</Link>
-        </Button>
+        <div>
+          <Button 
+            variant="outlined"
+            sx={styles.btn}
+          >
+            <Link style={styles.link} to="/lawash">Шаурма</Link>
+          </Button>
+
+          <Button 
+            variant="outlined"
+            sx={styles.btn}
+          >
+            <Link style={styles.link} to="/createLawash">Создать шаурму</Link>
+          </Button>
+        </div>
         
         <div>
           <Button 
@@ -40,6 +51,7 @@ export const NavBar = () => {
           </Button>
         </div>
       </nav>
+      <div style={{height: '100px'}}></div>
     </>
   )
 }
