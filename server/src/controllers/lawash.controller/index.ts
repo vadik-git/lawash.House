@@ -1,4 +1,5 @@
 import { Response, Request } from "express";
+
 import { LawashService } from "../../services";
 
 class LawashController {
