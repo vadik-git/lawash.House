@@ -2,6 +2,8 @@ import { LawashForm } from "../../components";
 
 export const CreateLawash = () => {
   return (
-    <LawashForm/>
+    <div style={{backgroundColor: '#333', paddingBottom: '50px'}}>
+      <LawashForm/>
+    </div>
   )
 }
