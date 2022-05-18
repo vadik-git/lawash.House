@@ -47,14 +47,14 @@ export const LawashModal = ({mode, closeModal, lawash}: any) => {
         <Card style={styles.card}>
 
           <CardHeader
-            title={formData.title}
+            title={lawash.title}
           />
 
           <CardMedia
             style={styles.cardMedia}
             component="img"
-            image={formData.image.base64}
-            alt={formData.title}
+            image={lawash.image.base64}
+            alt={lawash.title}
           />
 
           <CardContent sx={styles.cardContent}>
@@ -63,7 +63,7 @@ export const LawashModal = ({mode, closeModal, lawash}: any) => {
               variant="body2" 
               color="text.secondary"
             >
-              {formData.ingredients.map((item: IIngredient) => item.isAdd && <Button 
+              {lawash.ingredients.map((item: IIngredient) => item.isAdd && <Button 
                   disabled 
                   variant='outlined' 
                   sx={styles.ingredientItem}
@@ -75,7 +75,7 @@ export const LawashModal = ({mode, closeModal, lawash}: any) => {
               variant="body2" 
               color="text.secondary"
             >
-              Price: {formData.price}₴
+              Price: {lawash.price}₴
             </Typography>
 
             <Typography 
@@ -83,7 +83,7 @@ export const LawashModal = ({mode, closeModal, lawash}: any) => {
               variant="body2" 
               color="text.secondary"
             >
-              Size: {formData.size}
+              Size: {lawash.size}
             </Typography>
           </CardContent>
 

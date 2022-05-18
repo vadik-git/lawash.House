@@ -4,11 +4,10 @@ export const API_URL = 'http://localhost:5000';
 
 // CONSTS =============>
 
-export const LAWASH_PATH = 'lawash';
 export const CREATE_PATH = 'createLawash';
 export const UPDATE_PATH = 'update';
 export const BASKET_PATH = 'basket';
-export const SIGNIN_PATH = 'signIn';
+export const AUTH_PATH = 'auth';
 
 // NAMES =============>
 
