@@ -1,12 +1,13 @@
+import { IIngredients, ILawash } from "../types";
+
 export const API_URL = 'http://localhost:5000';
 
 // CONSTS =============>
 
-export const LAWASH_PATH = 'lawash';
 export const CREATE_PATH = 'createLawash';
 export const UPDATE_PATH = 'update';
 export const BASKET_PATH = 'basket';
-export const SIGNIN_PATH = 'signIn';
+export const AUTH_PATH = 'auth';
 
 // NAMES =============>
 
@@ -18,7 +19,7 @@ export const CHANGE = 'Изменить';
 
 // VALUES =============>
 
-export const sizesLawash = [
+export const SIZES = [
   {
     value: 'S',
     label: 'Small',
@@ -37,7 +38,7 @@ export const sizesLawash = [
   },
 ];
 
-export const formInitalValue = {
+export const INITIAL_VALUE: ILawash = {
   date: new Date().toISOString(),
   image: {
     name: '',
@@ -46,24 +47,35 @@ export const formInitalValue = {
     base64: '',
     file: '',
   },
-  ingredients: '',
+  ingredients: [],
   isActive: true,
   price: '',
-  size: '',
+  size: 'S',
   title: '',
 };
 
-export const MONTHS = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Ноябрь',
-  'Декабрь',
-];
-  
+export const INGREDIENTS:IIngredients = {
+  lawash: "Лаваш армянский",
+  tomato: "Свежий помидор",
+  cucumber: "Огурец",
+  cabbage: "Капуста",
+  cheese: "Сыр",
+  carrot: "Корейская морква",
+  saltCucumber: "Соленые огурцы",
+  mushrooms: "Грибы",
+  chicken: "Куриное филе",
+  pork: "Свинина",
+  beef: "Говядина",
+  onion: "Лук репчатый",
+  dill: "Укроп свежый",
+  blackPaper: "Перец черный",
+  sausage: "Колбаса",
+  ketchup: "Кетчуп",
+  mayonnaise: "Майонез",
+  saumon: "Лосось",
+  chips: "Картошка фри",
+  mint: "Мята",
+  chilli: "Перец чили",
+  bellPepper: "Болгарский перец",
+  garlicSauce: "Соус чесночный",
+};

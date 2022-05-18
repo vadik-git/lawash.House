@@ -23,7 +23,7 @@ const lawash: Schema = new Schema({
     require: true
   },
   ingredients: {
-    type: String,
+    type: Array,
     required: true
   },
   size: {

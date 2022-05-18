@@ -1,116 +1,125 @@
-import { useRef, useState } from 'react';
-import { Button, MenuItem, TextField } from "@mui/material";
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from "@mui/material";
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 
-import { ILawash } from '../../types';
 import { 
   CREATE, 
   UPDATE, 
   CHANGE, 
-  formInitalValue, 
-  sizesLawash, 
+  INITIAL_VALUE, 
+  SIZES, 
   LAWASHES, 
-  LAWASH_PATH,
+  INGREDIENTS,
 } from '../../consts';
 import { LawashService } from '../../services';
+import { useBase64 } from '../../hooks';
+import { IImage, IIngredient, ILawash, IProps, ISize } from '../../types';
+import { setLawashIngredient } from '../../utils/setLawashIngredient';
+import { useCustomNavigation } from '../../hooks';
+import placeholder from '../../assets/placeholder.jpeg'
 
-export const LawashForm = ({data}: any) => {
-  const [formData, setFormData] = useState<ILawash>(data || formInitalValue);
-  const navigate = useNavigate();
+export const LawashForm = ({data}: IProps) => {  
+  const [formData, setFormData] = useState<ILawash>(data || INITIAL_VALUE);
   const queryClient = useQueryClient();
   const imgRef = useRef() as any;
 
+  const { toLawashesPage } = useCustomNavigation();
+  const { imageBase64 } = useBase64();
+
+  useEffect(() => {
+    if(!formData.ingredients.length) {
+      const arr = [...formData.ingredients];
+
+      Object.keys(INGREDIENTS).map((item: string) => arr.push({
+        id: item, 
+        name: INGREDIENTS[item as keyof typeof INGREDIENTS],
+        isAdd: false,
+      }))      
+      setFormData({...formData, ingredients: [...arr]})
+    }
+  }, [formData]);
+
+  const setImage = (image: IImage) => setFormData({...formData, image: {...image}});
   const create = (lawash: ILawash) => LawashService.createLawash(lawash);
   const edit = (lawash: ILawash) => LawashService.updateLawash(lawash);
-
   const { mutateAsync } = useMutation(data ? edit : create);
 
-  const hundleSubmit = async(e: any) => {
+  const hundleSubmit = async(e: SyntheticEvent) => {
     e.preventDefault();
-
+    
     await mutateAsync(formData);
     queryClient.invalidateQueries(LAWASHES);
-    navigate(`../${LAWASH_PATH}`);
+    toLawashesPage();
   };
-
-  const imageBase64 = (e: any) => {
-    const file = e.target.files[0];  
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const fileInfo = {
-        name: file.name,
-        type: file.type,
-        size: Math.round(file.size / 1000) + ' kB',
-        base64: reader.result,
-        file: file,
-      } as any;
-      setFormData({...formData, image: {...fileInfo}});
-    }  
+  
+  const setIngredients = (e: SyntheticEvent) => {
+    setFormData({...formData, ingredients: [...setLawashIngredient(e, formData)]});
   }
-
+  
   return (
     <div style={styles.lawashForm}>
-      <h3 
-        style={styles.h3}
-      >{data ? `${UPDATE} Шаверму` : `${CREATE} Шаверму`}</h3>
+      <h3 style={styles.h3}>
+        {data ? `${UPDATE} Шаверму` : `${CREATE} Шаверму`}
+      </h3>
 
-      <input 
-        ref={imgRef}
-        type="file" 
-        style={{display: 'none'}} 
-        onChange={(e: any) => imageBase64(e)} 
-        accept="image/*"
-      />
-      {formData.image.base64
-        ? <>
-            <img 
-              src={formData.image.base64} 
-              alt="image_lawash" 
-              width={200}
-            /> 
-            <Button 
-              variant="text" 
-              onClick={() => imgRef.current.click()}
-            >
-              {CHANGE}
-            </Button>
-          </>
-        : <Button 
-            variant="text" 
-            onClick={() => imgRef.current.click()}
-          >
-            Добавить изображение
-          </Button>
-        }
+      <img 
+        src={formData.image.base64 || placeholder} 
+        alt="image_lawash" 
+        width={200}
+        style={{borderRadius: 3}}
+      /> 
+      
+      <Button 
+        sx={{...styles.btn, margin: '0 10px 27px'}}
+        variant="text" 
+        onClick={() => imgRef.current.click()}
+      >
+        {CHANGE}
+      </Button>
 
       <form 
-        onSubmit={(e: any) => hundleSubmit(e)}
+        onSubmit={(e: SyntheticEvent) => hundleSubmit(e)}
         style={styles.form}
-      >
+      > 
+        <input 
+          ref={imgRef}
+          type="file" 
+          style={{display: 'none'}} 
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => imageBase64(e, setImage)} 
+          accept="image/*"
+        />
         <TextField 
           sx={{marginTop: 3}}
           required 
           label="Название" 
           value={formData.title}
-          onChange={(e: any) => setFormData({...formData, title: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, title: e.target.value})}
           variant="standard" 
         />
-        <TextField
-          sx={{marginTop: 3}}
-          required 
-          value={formData.ingredients}
-          onChange={(e: any) => setFormData({...formData, ingredients: e.target.value})}
-          label="Ингредиенты"
-          variant="standard"
-        />
+        
+        <FormGroup style={{display: 'flex', flexDirection: 'row'}}>
+          {formData.ingredients.map((item: IIngredient) => 
+            <FormControlLabel 
+              style={{width: '200px'}} 
+              key={item.id + item.name} 
+              label={item.name} 
+              control={
+                <Checkbox 
+                  name={item.id}
+                  id={item.id}
+                  checked={item.isAdd}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIngredients(e)}
+                />
+              }
+            />
+          )}
+        </FormGroup>
+
         <TextField
           sx={{marginTop: 3}}
           required 
           value={formData.price}
-          onChange={(e: any) => setFormData({...formData, price: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, price: e.target.value})}
           label="Цена" 
           variant="standard" 
         />
@@ -120,12 +129,15 @@ export const LawashForm = ({data}: any) => {
           required
           label="Размер"
           value={formData.size}
-          onChange={(e: any) => setFormData({...formData, size: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, size: e.target.value})}
           fullWidth
           variant="standard"
         >
-          {sizesLawash.map((option: any) => (
-            <MenuItem key={option.value} value={option.value}>
+          {SIZES.map((option: ISize) => (
+            <MenuItem 
+              key={option.value} 
+              value={option.value}
+            >
               {option.label}
             </MenuItem>
           ))}
@@ -138,7 +150,6 @@ export const LawashForm = ({data}: any) => {
           {data ? UPDATE : CREATE}
         </Button>
       </form>
-
     </div>
   )
 }

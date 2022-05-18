@@ -16,6 +16,8 @@ export const UpdateLawash = () => {
   }
 
   return (
-    <LawashForm data={data}/>
+    <div style={{backgroundColor: '#333', paddingBottom: '50px'}}>
+      <LawashForm data={data}/>
+    </div>
   )
 };

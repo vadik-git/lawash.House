@@ -5,11 +5,13 @@ import { RiShoppingBasketFill } from 'react-icons/ri'
 import { 
   BASKET_PATH, 
   CREATE_PATH, 
-  LAWASH_PATH, 
-  SIGNIN_PATH,
+  AUTH_PATH,
 } from "../../consts";
+import { useAuth } from "../../hooks";
 
 export const NavBar = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <nav style={styles.nav}>
@@ -18,14 +20,14 @@ export const NavBar = () => {
             variant="outlined"
             sx={styles.btn}
           >
-            <Link style={styles.link} to={`/${LAWASH_PATH}`}>Шаурма</Link>
+            <Link style={styles.link} to={`/content`}>Шаурма</Link>
           </Button>
 
           <Button 
             variant="outlined"
             sx={styles.btn}
           >
-            <Link style={styles.link} to={`/${CREATE_PATH}`}>Создать шаурму</Link>
+            <Link style={styles.link} to={`/content/createLawash`}>Создать шаурму</Link>
           </Button>
         </div>
         
@@ -34,7 +36,7 @@ export const NavBar = () => {
             variant="outlined"
             sx={styles.btn}
           >
-            <Link style={styles.link} to={`/${SIGNIN_PATH}`}>Войти</Link>
+            <Link style={styles.link} to={`/${AUTH_PATH}`}>{user}</Link>
           </Button>
           <Button 
             variant="outlined"
